@@ -29,6 +29,6 @@ function [center] = ball_center(img, point)
         % calculating the center point(x or y) by adding the subtraction of
         % the backward steps from the forward steps, to the starting point
         % (x or y)
-        center(i) = point(i) + (travel(n_travel-1) - travel(n_travel))/2;
+        center(i) = ceil(point(i) + (travel(n_travel-1) - travel(n_travel))/2);
     end
 end
