@@ -4,7 +4,7 @@
 
 function [center] = ball_center(img, point)
 
-    % how many pixels have we travelled from the starting points
+    % how many pixels we have travelled from the starting points
     % [+x, -x, +y, -y] OR [+row, -row, +column, -column]
     travel      = [0, 0, 0, 0];
     
