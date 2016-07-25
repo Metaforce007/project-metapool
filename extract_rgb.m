@@ -7,6 +7,6 @@ function [rgb] = extract_rgb(img, point)
     
     % the r\g\b is at the 3rd dimension of the image $img, so we are
     % referring to the same pixel 3 times, each time for each dimension
-    for i=1 : 3; rgb(i) = img(point(1), point(2), i);
+    for i=1 : 3; rgb(i) = img(point(2), point(1), i);
     end
 end
