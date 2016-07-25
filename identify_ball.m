@@ -41,7 +41,7 @@ function [identity] = identify_ball(img, point)
         % $n_identity
         identity(n_identity, :)	= mod_point;
         
-        n_identity = n_identity + 1;    % incrementing by 1
+        n_identity = n_identity + 1; % incrementing by 1
         
         % reseting $mod_point; setting it to $point so we could continue
         % modifying and working with it
