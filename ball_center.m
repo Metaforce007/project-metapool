@@ -16,8 +16,6 @@ function [center] = ball_center(img, point)
             
             n_travel = n_travel + 1;    % incrementing the current travel by 1
             
-            % interpret_rgb(rgb) returns the color of which $rgb represents
-            % extract_rgb(img, point) returns the rgb of $point in $img
             % while the color of $point is not 8 (not the table color)
             while interpret_rgb(extract_rgb(img, point)) ~= 8
                 
