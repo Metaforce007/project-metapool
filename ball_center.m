@@ -27,7 +27,7 @@ function [center] = ball_center(img, point)
             % while the color of $point is not 8 (not the table color)
             while interpret_rgb(extract_rgb(img, point)) ~= 8
                 
-                % going 1 step forward \ backward, based on j
+                % going 1 step forward \ backward, based on $j
                 point(i) = point(i) - j;
                 
                 % incrementing the steps for the current travel by 1
@@ -36,7 +36,7 @@ function [center] = ball_center(img, point)
             
             % reseting the current point to its starting value
             % adding \ subtracting the travel distance to \ from $point(1),
-            % based on j (+1 OR -1);
+            % based on $j (+1 OR -1);
             point(i) = point(i) + j*travel(n_travel);
         end
         
