@@ -3,16 +3,24 @@
 % $img is an image that contains that ball
 % $point is a certain point on the ball
 
+
 function [identity] = identify_ball(img, point)
 
-    % starting and ending points represented as
-    % [start x, start y; end x, end y]
-    identity = [0, 0; 0, 0];
+    % starting and ending points and color represented as
+    % [start x, start y, end x, end y, color]
+    identity = [0, 0, 0, 0, 0];
     
     % re-assign $point to the center point of the ball
     point = ball_center(img, point);
     
-    mod_point = point;  % $mod_point stands for 'modification point'
+    % $mod_point stands for 'modification point'
+    mod_point = point;
+    
+    % hold rgb values for calculating the average rgb
+    rgb_vals = [0, 0, 0];
+    
+    % counter that counts how many rgb values we added to $rgb_vals
+    rgb_added = 0;
     
     % a counter to count wether we are assigning the starting points or the
     % ending to $identity
@@ -22,16 +30,40 @@ function [identity] = identify_ball(img, point)
     % 1 step backward (-x \ -y)
     for i=-1 : 2 : 1
         
+        % holds the current rgb value
+        current_rgb = extract_rgb(img, mod_point);
+        
         % while the color of $mod_point is not 8 (not the table color)
-        while interpret_rgb(extract_rgb(img, mod_point)) ~= 8
+        while interpret_rgb(current_rgb) ~= 8
             
-            % x going 1 step forward \ backward -> based on j
+            % adding the current rgb value to the total rgb values
+            rgb_vals = rgb_vals + current_rgb;
+            
+            % incrementing rgb adding counter by 1
+            rgb_added = rgb_added + 1;
+            
+            % getting a new current rgb value
+            current_rgb = extract_rgb(img, mod_point);
+            
+            % x going 1 step forward \ backward, based on j
             mod_point(1) = mod_point(1) + i;
         end
         
+        % holds the current rgb value
+        current_rgb = extract_rgb(img, [point(1), mod_point(2)]);
+        
         % while the color of [$point(1), $mod_point(2)] is not 8 (not the
         % table color)
-        while interpret_rgb(extract_rgb(img, [point(1), mod_point(2)])) ~= 8
+        while interpret_rgb(current_rgb) ~= 8
+            
+            % adding the current rgb value to the total rgb values
+            rgb_vals = rgb_vals + current_rgb;
+            
+            % incrementing rgb adding counter by 1
+            rgb_added = rgb_added + 1;
+            
+            % getting a new current rgb value
+            current_rgb = extract_rgb(img, [point(1), mod_point(2)]);
             
             % y going 1 step forward \ backward, based on j
             mod_point(2) = mod_point(2) + i;
@@ -39,12 +71,20 @@ function [identity] = identify_ball(img, point)
         
         % assign starting \ ending points to $identity, based on
         % $n_identity
-        identity(n_identity, :)	= mod_point;
+        identity(n_identity)    = mod_point(1);
+        identity(n_identity+1)  = mod_point(2);
         
-        n_identity = n_identity + 1; % incrementing by 1
+        % incrementing by 2 so we could add the ending points to $identity
+        n_identity = n_identity + 2;
         
         % reseting $mod_point; setting it to $point so we could continue
         % modifying and working with it
         mod_point  = point;
     end
+    
+    % calculating the average rgb values
+    rgb_vals = rgb_vals ./ rgb_added;
+    
+    % interpreting $rgb_vals to a number that represents a color
+    identity(5) = interpret_rgb(rgb_vals);
 end
