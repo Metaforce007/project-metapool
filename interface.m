@@ -132,6 +132,9 @@ codes = cellstr(get(hObject, 'String'));
 % get the selected color and convert it to color code (0-8)
 selected_code = codes{get(hObject, 'Value')}(1) - 48;
 
+% consider using codes = [0:8] and this code for faster performances
+% selected_code = codes(str2num(get(hObject, 'Value')(1)));
+
 % assign $selected_code to handles variable
 handles.selected_code = selected_code;
 
