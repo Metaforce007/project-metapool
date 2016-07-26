@@ -36,7 +36,7 @@ function [identity] = identify_ball(img, point)
         % while the color of $mod_point is not 8 (not the table color)
         while interpret_rgb(current_rgb) ~= 8
             
-            % adding the current rgb value to the total rgb values
+            % summing the current rgb values
             rgb_vals = rgb_vals + current_rgb;
             
             % incrementing rgb adding counter by 1
@@ -56,7 +56,7 @@ function [identity] = identify_ball(img, point)
         % table color)
         while interpret_rgb(current_rgb) ~= 8
             
-            % adding the current rgb value to the total rgb values
+            % summing the current rgb values
             rgb_vals = rgb_vals + current_rgb;
             
             % incrementing rgb adding counter by 1
