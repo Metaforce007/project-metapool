@@ -45,7 +45,7 @@ function [identity] = identify_ball(img, point)
             % getting a new current rgb value
             current_rgb = extract_rgb(img, mod_point);
             
-            % x going 1 step forward \ backward, based on j
+            % x going 1 step forward \ backward, based on $j
             mod_point(1) = mod_point(1) + i;
         end
         
@@ -65,7 +65,7 @@ function [identity] = identify_ball(img, point)
             % getting a new current rgb value
             current_rgb = extract_rgb(img, [point(1), mod_point(2)]);
             
-            % y going 1 step forward \ backward, based on j
+            % y going 1 step forward \ backward, based on $j
             mod_point(2) = mod_point(2) + i;
         end
         
