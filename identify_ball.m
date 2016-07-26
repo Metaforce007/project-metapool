@@ -1,14 +1,16 @@
 % identify_ball(img, point) returns the starting and ending points of the
-% ball on point $point
+% ball on point $point and its average rgb representation
 % $img is an image that contains that ball
 % $point is a certain point on the ball
 
 
 function [identity] = identify_ball(img, point)
 
+    code8 = [16, 70, 19]; % !!! retrieve from interface
+
     % starting and ending points and color represented as
-    % [start x, start y, end x, end y, color]
-    identity = [0, 0, 0, 0, 0];
+    % [start x, start y, end x, end y, r, g, b]
+    identity = [0, 0, 0, 0, 0, 0, 0];
     
     % re-assign $point to the center point of the ball
     point = ball_center(img, point);
@@ -34,9 +36,9 @@ function [identity] = identify_ball(img, point)
         current_rgb = extract_rgb(img, mod_point);
         
         % while the color of $mod_point is not 8 (not the table color)
-        while interpret_rgb(current_rgb) ~= 8
+        while confirm_rgb(current_rgb, code8) ~= 8
             
-            % summing the current rgb values
+            % adding the current rgb value to the total rgb values
             rgb_vals = rgb_vals + current_rgb;
             
             % incrementing rgb adding counter by 1
@@ -54,9 +56,9 @@ function [identity] = identify_ball(img, point)
         
         % while the color of [$point(1), $mod_point(2)] is not 8 (not the
         % table color)
-        while interpret_rgb(current_rgb) ~= 8
+        while confirm_rgb(current_rgb, code8) ~= 8
             
-            % summing the current rgb values
+            % adding the current rgb value to the total rgb values
             rgb_vals = rgb_vals + current_rgb;
             
             % incrementing rgb adding counter by 1
@@ -85,6 +87,6 @@ function [identity] = identify_ball(img, point)
     % calculating the average rgb values
     rgb_vals = rgb_vals ./ rgb_added;
     
-    % interpreting $rgb_vals to a number that represents a color
-    identity(5) = interpret_rgb(rgb_vals);
+    % assigning average rgb value to the ball identity
+    identity(5:7) = ceil(rgb_vals);
 end
