@@ -5,11 +5,16 @@
 
 
 function [identity] = identify_ball(img, point)
+
+    load('codeX.mat'); code8 = codeX(9, :);
     
-    % try to load it once for all files and refresh it if user configures
-    % it; can check if exist -> if it does exist do not reload it; if it
-    % does not exist, alert and load; or something like that
-    load('code8.mat');
+    % if the selected point is equal to the surface color
+    if confirm_rgb(extract_rgb(img, point), code8)
+        
+        % set its points and rgb code and return
+        identity = [point(1:2), point(1:2)+1, code8];
+        return;
+    end
 
     % starting and ending points and color represented as
     % [start x, start y, end x, end y, r, g, b]
