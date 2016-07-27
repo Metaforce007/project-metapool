@@ -200,12 +200,18 @@ img_ball = imcrop(exm32, crop_area);
 color_code = interpret_rgb(ball_identity(5:7))
 
 % if the user have already configured the color of the selected ball
-if configured(color_code)
+if color_code ~= -1 && configured(color_code)
     
     % do more things here after a ball has confirmed (maybe not here?)
     
     % update text box $selected to the new color
     set(handles.selected, 'string', interpret_code(color_code));
+
+% else if the user have not yet configured the color of the selected ball
+elseif color_code == -1
+    
+    % update text box $selected to 'unknown'
+    set(handles.selected, 'string', 'unknown');
 end
     
 % set axes
