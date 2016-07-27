@@ -5,8 +5,11 @@
 
 
 function [identity] = identify_ball(img, point)
-
-    code8 = [16, 70, 19]; % !!! retrieve from interface
+    
+    % try to load it once for all files and refresh it if user configures
+    % it; can check if exist -> if it does exist do not reload it; if it
+    % does not exist, alert and load; or something like that
+    load('code8.mat');
 
     % starting and ending points and color represented as
     % [start x, start y, end x, end y, r, g, b]
@@ -36,7 +39,7 @@ function [identity] = identify_ball(img, point)
         current_rgb = extract_rgb(img, mod_point);
         
         % while the color of $mod_point is not 8 (not the table color)
-        while confirm_rgb(current_rgb, code8) ~= 8
+        while confirm_rgb(current_rgb, code8) == 0
             
             % adding the current rgb value to the total rgb values
             rgb_vals = rgb_vals + current_rgb;
@@ -56,7 +59,7 @@ function [identity] = identify_ball(img, point)
         
         % while the color of [$point(1), $mod_point(2)] is not 8 (not the
         % table color)
-        while confirm_rgb(current_rgb, code8) ~= 8
+        while confirm_rgb(current_rgb, code8) == 0
             
             % adding the current rgb value to the total rgb values
             rgb_vals = rgb_vals + current_rgb;
