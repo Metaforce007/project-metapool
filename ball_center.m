@@ -4,10 +4,7 @@
 
 function [center] = ball_center(img, point)
 
-    % try to load it once for all files and refresh it if user configures
-    % it; can check if exist -> if it does exist do not reload it; if it
-    % does not exist, alert and load; or something like that
-    load('code8.mat');
+    load('codeX.mat'); code8 = codeX(9, :);
 
     % how many pixels we have travelled from the starting points
     % [+x, -x, +y, -y] OR [+row, -row, +column, -column]
