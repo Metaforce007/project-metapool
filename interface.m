@@ -64,6 +64,9 @@ cd_self;
 % load the frame
 feed = imread('exm2.jpg');
 
+% consider contrasting the image so it will be easier to detect colors
+% feed = imadjust(feed, [.2, .3, 0; .6, .7, 1], []);
+
 % handler of $feed
 h_feed = imagesc(feed);
 
