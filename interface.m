@@ -22,7 +22,7 @@ function varargout = interface(varargin)
 
 % Edit the above text to modify the response to help interface
 
-% Last Modified by GUIDE v2.5 26-Jul-2016 23:50:53
+% Last Modified by GUIDE v2.5 27-Jul-2016 10:15:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,6 +54,8 @@ function interface_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for interface
 handles.output = hObject;
+
+cd_self;
 
 % assigning variables to handles variables make it possible for us to use
 % them in the different functions
@@ -151,14 +153,20 @@ function submit_Callback(hObject, eventdata, handles)
 % temporary - problem with handles.feed
 img2 = imread('exm2.jpg');
 
+load('codeX.mat');
+
 % if user have selected to configure the table surface color
 if handles.selected_code == 8
-    
-    % identity of surface color; save it as .mat file so we could continue
-    % work with it
-    code8 = average_rgb(img2, handles.surface);
-    save('code8.mat', 'code8');
+
+    % set average rgb value to surface average rgb value instead of a ball
+    % average rgb value, using $surface
+    handles.avg_rgb = average_rgb(img2, handles.surface);
 end
+
+codeX(handles.selected_code + 1, :) = handles.avg_rgb;
+save('codeX.mat', 'codeX');
+
+set(handles.selected, 'string', interpret_code(handles.selected_code));
 
 % Update handles structure
 guidata(hObject, handles);
@@ -188,6 +196,18 @@ crop_area(3:4) = crop_area(3:4) - crop_area(1:2);
 % crop the area of the ball
 img_ball = imcrop(exm32, crop_area);
 
+% interpret the rgb value of the selected ball into color code (0-8)
+color_code = interpret_rgb(ball_identity(5:7))
+
+% if the user have already configured the color of the selected ball
+if configured(color_code)
+    
+    % do more things here after a ball has confirmed (maybe not here?)
+    
+    % update text box $selected to the new color
+    set(handles.selected, 'string', interpret_code(color_code));
+end
+    
 % set axes
 axes(handles.current_ball);
 
@@ -200,3 +220,36 @@ handles.avg_rgb = ball_identity(5:7);
 
 % Update handles structure
 guidata(hObject, handles);
+
+
+% --- Executes on button press in clear_config.
+function clear_config_Callback(hObject, eventdata, handles)
+
+% create a new matrix so we could reset the old one
+codeX = zeros(9, 3);
+
+% save it as the new one
+save('codeX.mat', 'codeX');
+
+
+
+function selected_Callback(hObject, eventdata, handles)
+% hObject    handle to selected (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of selected as text
+%        str2double(get(hObject,'String')) returns contents of selected as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function selected_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to selected (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
