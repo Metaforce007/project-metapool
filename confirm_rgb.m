@@ -7,7 +7,7 @@ function [result] = confirm_rgb(rgb, base_rgb)
 
     % how much does the rgb representation can deviate from its source
     % both + and -
-    deviation_rate = base_rgb .* 2;
+    deviation_rate = [50, 50, 50];
     
     %[max_rgb, col] = max(base_rgb) might have to use the max value for
     % high deviation rate
