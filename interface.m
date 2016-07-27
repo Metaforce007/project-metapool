@@ -22,7 +22,7 @@ function varargout = interface(varargin)
 
 % Edit the above text to modify the response to help interface
 
-% Last Modified by GUIDE v2.5 27-Jul-2016 10:15:10
+% Last Modified by GUIDE v2.5 27-Jul-2016 11:39:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -55,6 +55,7 @@ function interface_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for interface
 handles.output = hObject;
 
+% change current directory to this file directory
 cd_self;
 
 % assigning variables to handles variables make it possible for us to use
@@ -82,7 +83,7 @@ imshow(feed);
 handles.selected_code = 0;
 
 % a problem with this; check
-handles.feed = feed;
+set_feed(feed);
 
 % average rgb value of the surface or a ball
 handles.avg_rgb = [0, 0, 0];
@@ -93,6 +94,14 @@ guidata(hObject, handles);
 
 % UIWAIT makes interface wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
+
+function set_feed(feed)
+    global glb_feed;
+    glb_feed = feed;
+
+function [feed] = get_feed()
+    global glb_feed;
+    feed = glb_feed;
 
 
 % --- Outputs from this function are returned to the command line.
@@ -150,9 +159,6 @@ end
 % --- Executes on button press in submit.
 function submit_Callback(hObject, eventdata, handles)
 
-% temporary - problem with handles.feed
-img2 = imread('exm2.jpg');
-
 load('codeX.mat');
 
 % if user have selected to configure the table surface color
@@ -160,7 +166,7 @@ if handles.selected_code == 8
 
     % set average rgb value to surface average rgb value instead of a ball
     % average rgb value, using $surface
-    handles.avg_rgb = average_rgb(img2, handles.surface);
+    handles.avg_rgb = average_rgb(get_feed, handles.surface);
 end
 
 codeX(handles.selected_code + 1, :) = handles.avg_rgb;
@@ -174,9 +180,6 @@ guidata(hObject, handles);
 
 function click(hObject, eventdata, handles)
 
-% temporary - problem with handles.feed
-exm32 = imread('exm2.jpg');
-
 % get the position of the cursor
 pos = get(handles.table, 'CurrentPoint');
 
@@ -184,7 +187,7 @@ pos = get(handles.table, 'CurrentPoint');
 pos = ceil(pos(1, 1:2));
 
 % get the ball identity that is on $pos
-ball_identity = identify_ball(exm32, pos);
+ball_identity = identify_ball(get_feed, pos);
 
 % isolate the crop area from $ball_identity and modify it to have the
 % starting points and width and height (not the ending points);
@@ -194,10 +197,10 @@ crop_area = ball_identity(1:4);
 crop_area(3:4) = crop_area(3:4) - crop_area(1:2);
 
 % crop the area of the ball
-img_ball = imcrop(exm32, crop_area);
+img_ball = imcrop(get_feed, crop_area);
 
 % interpret the rgb value of the selected ball into color code (0-8)
-color_code = interpret_rgb(ball_identity(5:7))
+color_code = interpret_rgb(ball_identity(5:7));
 
 % if the user have already configured the color of the selected ball
 if color_code ~= -1 && configured(color_code)
@@ -236,7 +239,6 @@ codeX = zeros(9, 3);
 
 % save it as the new one
 save('codeX.mat', 'codeX');
-
 
 
 function selected_Callback(hObject, eventdata, handles)
