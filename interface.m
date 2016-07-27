@@ -62,7 +62,7 @@ cd_self;
 % them in the different functions
 
 % load the frame
-feed = imread('exm2.jpg');
+feed = imread('exm1.jpg');
 
 % consider contrasting the image so it will be easier to detect colors
 % feed = imadjust(feed, [.2, .3, 0; .6, .7, 1], []);
@@ -165,7 +165,7 @@ function submit_Callback(hObject, eventdata, handles)
 load('codeX.mat');
 
 % if user have selected to configure the table surface color
-if handles.selected_code == 8
+if handles.selected_code == 8 || handles.selected_code == 9
 
     % set average rgb value to surface average rgb value instead of a ball
     % average rgb value, using $surface
@@ -173,13 +173,13 @@ if handles.selected_code == 8
     
     % assign the surface color to the average of the current one and the
     % new one -> to allow a variety of surface shades
-    codeX(9, :) = ceil((codeX(9, :) + handles.avg_rgb) ./ 2);
-    
-else
+    % codeX(9, :) = ceil((codeX(9, :) + handles.avg_rgb) ./ 2);
+end    
+%else
     
     % assign average rgb of $selected_code to $codeX
     codeX(handles.selected_code + 1, :) = handles.avg_rgb;
-end
+%end
 
 save('codeX.mat', 'codeX');
 
@@ -247,7 +247,7 @@ guidata(hObject, handles);
 function clear_config_Callback(hObject, eventdata, handles)
 
 % create a new matrix so we could reset the old one
-codeX = zeros(9, 3);
+codeX = zeros(10, 3);
 
 % save it as the new one
 save('codeX.mat', 'codeX');
