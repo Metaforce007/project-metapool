@@ -7,9 +7,9 @@ function [result] = confirm_rgb(rgb, base_rgb)
 
     % how much does the rgb representation can deviate from its source
     % both + and -
-    deviation_rate = sum(base_rgb) / 3;
+    deviation_rate = base_rgb .* 2;
     
-    %[max_rgb, col] = max(base_rgb); might have to use the max value for
+    %[max_rgb, col] = max(base_rgb) might have to use the max value for
     % high deviation rate
     
     % holds whether r\g\b from $rgb are similar to r\g\b from $base_rgb
@@ -20,7 +20,7 @@ function [result] = confirm_rgb(rgb, base_rgb)
         
         % iterate -deviation_rate : deviation_rate to check if r\g\b
         % (based on i) from $rgb is similar to r\g\b from $base_rgb
-        for j=-deviation_rate : deviation_rate
+        for j=-deviation_rate(i) : deviation_rate(i)
             
             % if r\g\b from $rgb + $j equal to r\g\b from $base_rgb
             % than it is considered a 'similar' color
