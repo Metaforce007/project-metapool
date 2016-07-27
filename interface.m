@@ -55,7 +55,6 @@ function interface_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for interface
 handles.output = hObject;
 
-
 % assigning variables to handles variables make it possible for us to use
 % them in the different functions
 
@@ -80,6 +79,7 @@ imshow(feed);
 % selected color from color list (0 - 8)
 handles.selected_code = 0;
 
+% a problem with this; check
 handles.feed = feed;
 
 % average rgb value of the surface or a ball
@@ -118,11 +118,6 @@ handles.surface = ceil(surface);
 guidata(hObject, handles);
 
 
-% hObject    handle to select_area (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
 % --- Executes on selection change in codes_list.
 function codes_list_Callback(hObject, eventdata, handles)
 
@@ -142,22 +137,9 @@ handles.selected_code = selected_code;
 guidata(hObject, handles);
 
 
-% hObject    handle to codes_list (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns codes_list contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from codes_list
-
-
 % --- Executes during object creation, after setting all properties.
 function codes_list_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to codes_list (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -172,24 +154,14 @@ img2 = imread('exm2.jpg');
 % if user have selected to configure the table surface color
 if handles.selected_code == 8
     
-    % assigning the average rgb value of $handles.surface to
-    % $handles.avg_rgb
-    handles.avg_rgb = average_rgb(img2, handles.surface);
+    % identity of surface color; save it as .mat file so we could continue
+    % work with it
+    code8 = average_rgb(img2, handles.surface);
+    save('code8.mat', 'code8');
 end
-
-% temporary - just adding it to the global workspace. cannot be worked
-% with. must find a solution of which user can configure all color from 1
-% to 8 and it will save as a .mat in the folder -> and than all the
-% function will reference that .mat for colors, and a function that need to
-% identify colors will use that .mat
-assignin('base', strcat('code', num2str(handles.selected_code)), [handles.selected_code, handles.avg_rgb]);
 
 % Update handles structure
 guidata(hObject, handles);
-
-% hObject    handle to submit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 
 function click(hObject, eventdata, handles)
