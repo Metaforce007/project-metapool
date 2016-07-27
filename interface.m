@@ -167,11 +167,20 @@ if handles.selected_code == 8
     % set average rgb value to surface average rgb value instead of a ball
     % average rgb value, using $surface
     handles.avg_rgb = average_rgb(get_feed, handles.surface);
+    
+    % assign the surface color to the average of the current one and the
+    % new one -> to allow a variety of surface shades
+    codeX(9, :) = ceil((codeX(9, :) + handles.avg_rgb) ./ 2);
+    
+else
+    
+    % assign average rgb of $selected_code to $codeX
+    codeX(handles.selected_code + 1, :) = handles.avg_rgb;
 end
 
-codeX(handles.selected_code + 1, :) = handles.avg_rgb;
 save('codeX.mat', 'codeX');
 
+% update text box $selected to the new color
 set(handles.selected, 'string', interpret_code(handles.selected_code));
 
 % Update handles structure
